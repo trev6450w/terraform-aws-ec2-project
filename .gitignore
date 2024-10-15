@@ -1,0 +1,57 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Crash log files
+crash.log
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore any .tfvars files that are generated automatically for each Terraform run
+# These should be included in .gitignore if they contain sensitive information
+*.tfvars
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore generated SSH keys
+*.pem
+id_rsa
+id_rsa.pub
+
+# Ignore sensitive environment variables file
+.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore log files
+*.log
+
+# Ignore any local backups
+*.bak
+
+# AWS specific ignores
+.aws/
+aws.json
+
+# Ignore any scripts that might contain sensitive information
+*.sh
+
+# Ignore any temporary files
+*.tmp
