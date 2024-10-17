@@ -155,7 +155,7 @@ resource "aws_instance" "web" {
       "sudo systemctl enable docker",
       "sudo systemctl start docker",
       "sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT",
-      "sudo apt-get install -y iptables-persistent",
+      "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent",
       "sudo netfilter-persistent save"
     ]
   }
