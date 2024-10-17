@@ -59,5 +59,6 @@ When using "ubuntu", you can specify the os_version. For "amazon-linux-2", the v
 - Launches an EC2 instance (t2.micro) with the specified OS (default: Ubuntu 20.04)
 - Generates a new SSH key pair for the instance
 - Creates Route 53 zone and records for the specified domain
+- Automatically installs Docker
 - Outputs instance IP, SSH keys, and nameservers
 
