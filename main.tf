@@ -65,7 +65,7 @@ resource "aws_route_table_association" "a" {
 
 resource "aws_security_group" "allow_tls" {
   name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
+  description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = aws_vpc.main.id
 
   ingress {
@@ -100,7 +100,7 @@ resource "aws_security_group" "allow_tls" {
   }
 
   tags = {
-    Name = "allow_tls"
+    Name = "allow_tls_and_outbound"
   }
 }
 
@@ -132,6 +132,32 @@ resource "aws_instance" "web" {
   tags = {
     Name = "Web Instance"
     OS   = var.os_name
+  }
+
+  connection {
+    type        = "ssh"
+    user        = var.os_name == "ubuntu" ? "ubuntu" : "ec2-user"
+    private_key = tls_private_key.example.private_key_pem
+    host        = self.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y ca-certificates curl gnupg",
+      "sudo install -m 0755 -d /etc/apt/keyrings",
+      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
+      "sudo chmod a+r /etc/apt/keyrings/docker.gpg",
+      "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
+      "sudo apt-get update",
+      "sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
+      "sudo usermod -aG docker $USER",
+      "sudo systemctl enable docker",
+      "sudo systemctl start docker",
+      "sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT",
+      "sudo apt-get install -y iptables-persistent",
+      "sudo netfilter-persistent save"
+    ]
   }
 }
 
